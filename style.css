@@ -1,0 +1,76 @@
+body {
+    margin: 0;
+    padding: 0;
+    background: #faece2;
+    font-family: 'Segoe UI', sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+  }
+  
+  .container {
+    background: white;
+    border-radius: 15px;
+    padding: 2rem;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: row;
+    gap: 2rem;
+  }
+  
+  .message-box {
+    max-width: 300px;
+    font-size: 16px;
+    color: #333;
+    text-align:center; /* Justifica el texto */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  
+  .poem {
+    margin-bottom: 2rem;
+  }
+  
+  .timer {
+    font-weight: bold;
+    font-size: 14px;
+  }
+  
+  .heart-tree {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+  }
+  
+  .trunk {
+    width: 20px;
+    height: 60px;
+    background: #26976c;
+    border-radius: 5px;
+    margin-top: -10px;
+  }
+  
+  .hearts {
+    width: 220px;
+    height: 220px;
+    position: relative;
+  }
+  
+  .heart {
+    position: absolute;
+    font-size: 16px;
+    color: pink;
+    animation: float 5s infinite ease-in-out;
+  }
+  
+  @keyframes float {
+    0%   { transform: scale(1) rotate(0deg); }
+    50%  { transform: scale(1.2) rotate(15deg); }
+    100% { transform: scale(1) rotate(-15deg); }
+  }
+  
