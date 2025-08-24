@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>¿Me das un besito? 💋</title>
+  <meta name="description" content="Paginita romántica para pedir un besito a tu novio" />
+  <style>
+    :root{
+      --bg: #fff6f8;
+      --card: #ffffff;
+      --text: #1f2937;
+      --muted:#6b7280;
+      --primary:#ef476f; /* rosa besito */
+      --primary-700:#d43a60;
+      --ring: rgba(239,71,111,.35);
+      --yes:#22c55e;
+      --no:#64748b;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Noto Sans, "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      color:var(--text); background:var(--bg); overflow:hidden;
+    }
+
+    /* Corazones flotando de fondo */
+    .floaters{position:fixed; inset:0; z-index:-1; pointer-events:none; overflow:hidden}
+    .heart{
+      position:absolute; opacity:.15; font-size:clamp(20px, 3vw, 42px);
+      animation: rise linear forwards;
+    }
+    @keyframes rise {
+      0%{ transform: translateY(10vh) scale(.8) rotate(0deg); opacity:.05 }
+      50%{ opacity:.2 }
+      100%{ transform: translateY(-120vh) scale(1.1) rotate(15deg); opacity:0 }
+    }
+
+    /* Contenedor principal */
+    .wrap{
+      display:grid; place-items:center; height:100%; padding:24px;
+    }
+    .card{
+      width:min(680px, 92vw); background:var(--card); border-radius:24px;
+      box-shadow: 0 10px 30px rgba(239,71,111,.15), 0 4px 14px rgba(17,24,39,.08);
+      border:1px solid #fbe1e7;
+      padding:28px 24px 24px; position:relative;
+    }
+    .badge{
+      position:absolute; top:14px; right:14px; font-size:12px; letter-spacing:.2px;
+      background:#ffe4ea; color:#b4234c; padding:6px 10px; border-radius:999px; border:1px solid #ffd1db;
+    }
+    h1{ margin:6px 0 10px; font-size:clamp(26px, 4vw, 40px); line-height:1.1 }
+    p.lead{ margin:0 0 12px; color:var(--muted); font-size:clamp(14px, 2.2vw, 18px)}
+
+    .buttons{ display:flex; gap:12px; flex-wrap:wrap; margin-top:16px }
+    button, a.btn{
+      appearance:none; border:none; cursor:pointer; font-weight:700; letter-spacing:.2px;
+      padding:14px 20px; border-radius:999px; transition:.18s ease transform, box-shadow .18s ease, background .18s ease;
+      outline: none; text-decoration:none; display:inline-flex; align-items:center; gap:8px;
+      box-shadow: 0 6px 16px rgba(31,41,55,.08);
+    }
+    button:focus-visible, a.btn:focus-visible{ box-shadow: 0 0 0 4px var(--ring); }
+
+    #yes{
+      background: var(--yes); color:white; font-size:16px;
+    }
+    #yes:hover{ transform: translateY(-2px); }
+
+    #no{
+      background:#e9eef6; color:#0f172a; position:relative; font-size:16px; /* será dinamico */
+    }
+
+    .tiny{
+      display:block; margin-top:10px; color:#6b7280; font-size:13px;
+    }
+    .tiny a{ color:var(--no); }
+
+    /* Modal */
+    .modal{
+      position:fixed; inset:0; display:none; place-items:center; background:rgba(10, 10, 20, .4); backdrop-filter: blur(2px);
+      padding:20px; z-index:40; animation: fade .2s ease;
+    }
+    .modal[open]{ display:grid; }
+    @keyframes fade { from{opacity:0} to{opacity:1} }
+    .modal-card{
+      background:white; width:min(520px,92vw); border-radius:24px; padding:28px; text-align:center;
+      box-shadow: 0 20px 60px rgba(0,0,0,.18);
+    }
+    .kiss{
+      font-size:72px; line-height:1; filter: drop-shadow(0 8px 20px rgba(239,71,111,.35));
+      animation: pop .35s ease;
+    }
+    @keyframes pop{ from{ transform:scale(.7); opacity:0 } to{ transform:scale(1); opacity:1 } }
+    .close{ margin-top:14px; background:var(--primary); color:white }
+
+    /* Mini aviso de consentimiento accesible */
+    .consent{ margin-top:8px; font-size:12px; color:#6b7280 }
+
+    /* Estampitas de beso */
+    .stamp{ position:fixed; font-size:28px; pointer-events:none; animation: fadeOut 1s ease forwards }
+    @keyframes fadeOut{ to{ transform: translateY(-14px) scale(1.2); opacity:0 } }
+
+    footer{ position:fixed; bottom:10px; left:0; right:0; text-align:center; font-size:12px; color:#94a3b8 }
+  </style>
+</head>
+<body>
+  <div class="floaters" id="floaters" aria-hidden="true"></div>
+
+  <main class="wrap">
+    <section class="card" role="dialog" aria-labelledby="t1" aria-describedby="d1">
+      <span class="badge"></span>
+      <h1 id="t1">Amor… ¿me das un besito? 💋</h1>
+      <p class="lead" id="d1">Prometo cuidarlo</p>
+
+      <div class="buttons">
+        <button id="yes" aria-label="Sí, te doy un besito">Sí, toma 😘</button>
+        <button id="no" aria-label="No, gracias por ahora">Mmm… no 😶‍🌫️</button>
+    </section>
+  </main>
+
+  <dialog class="modal" id="modal">
+    <div class="modal-card">
+      <div class="kiss">💋</div>
+      <h2>¡Gracias por el besito, mi vida! 🥰</h2>
+      <p>Te mando mil más de regreso… 1, 2, 3… 💞</p>
+      <button class="close" id="close">Cerrar</button>
+    </div>
+  </dialog>
+
+  <footer>Hecho con amor ✨</footer>
+
+  <script>
+    // Corazones flotando aleatorios
+    (function hearts(){
+      const container = document.getElementById('floaters');
+      const makeHeart = () => {
+        const span = document.createElement('span');
+        span.className = 'heart';
+        span.textContent = Math.random() > .5 ? '❤' : '💗';
+        const left = Math.random()*100;
+        const duration = 10 + Math.random()*12;
+        const delay = Math.random()*5;
+        span.style.left = left + 'vw';
+        span.style.bottom = '-10vh';
+        span.style.animationDuration = duration + 's';
+        span.style.animationDelay = delay + 's';
+        container.appendChild(span);
+        setTimeout(()=> span.remove(), (duration+delay)*1000);
+      };
+      for(let i=0;i<16;i++) setTimeout(makeHeart, i*300);
+      setInterval(makeHeart, 900);
+    })();
+
+    // Botones
+    const yes = document.getElementById('yes');
+    const noBtn = document.getElementById('no');
+    const later = document.getElementById('later');
+    const modal = document.getElementById('modal');
+    const close = document.getElementById('close');
+
+    // "No" escapa al pasar el mouse
+    function moveNo(){
+      const pad = 10; // margen
+      const maxX = window.innerWidth - noBtn.offsetWidth - pad;
+      const maxY = window.innerHeight - noBtn.offsetHeight - pad;
+      const x = Math.random()*maxX + 'px';
+      const y = Math.random()*maxY + 'px';
+      noBtn.style.position = 'fixed';
+      noBtn.style.left = x;
+      noBtn.style.top = y;
+    }
+
+    let teased = false;
+    noBtn.addEventListener('mouseenter', ()=>{ moveNo(); teased = true; });
+    noBtn.addEventListener('click', (e)=>{
+      // por si alguien logra alcanzarlo con teclado o mucha destreza :)
+      e.preventDefault();
+      moveNo();
+    });
+
+    // "Sí" muestra modal + confetti de besos
+    function popKiss(x,y){
+      const span = document.createElement('span');
+      span.className='stamp';
+      span.textContent = Math.random() > .7 ? '💘' : '💋';
+      span.style.left = (x-10) + 'px';
+      span.style.top = (y-10) + 'px';
+      document.body.appendChild(span);
+      setTimeout(()=> span.remove(), 900);
+    }
+
+    yes.addEventListener('click', (e)=>{
+      // lluvia de besitos
+      for(let i=0;i<24;i++){
+        setTimeout(()=>{
+          const rx = Math.random()*window.innerWidth;
+          const ry = Math.random()*window.innerHeight;
+          popKiss(rx, ry);
+        }, i*40);
+      }
+      modal.setAttribute('open', '');
+    });
+
+    close.addEventListener('click', ()=> modal.removeAttribute('open'));
+    modal.addEventListener('click', (e)=>{ if(e.target === modal) modal.removeAttribute('open'); });
+
+
+
+    // Accesibilidad: si el usuario NO jugó con el no, añade título explicando
+    window.setTimeout(()=>{
+      if(!teased) noBtn.title = 'Prometo que no muerdo… (ok, sí escapo un poquito 😅)';
+    }, 1500);
+  </script>
+</body>
+</html>
